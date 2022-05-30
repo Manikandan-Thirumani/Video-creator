@@ -38,6 +38,8 @@ namespace WindowsFormsApp2
             this.openFileDialogimage = new System.Windows.Forms.OpenFileDialog();
             this.label3 = new System.Windows.Forms.Label();
             this.txtvideoname = new System.Windows.Forms.TextBox();
+            this.lblaudiomsg = new System.Windows.Forms.Label();
+            this.lblimagefilesmsg = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button2
@@ -112,11 +114,31 @@ namespace WindowsFormsApp2
             this.txtvideoname.Size = new System.Drawing.Size(358, 26);
             this.txtvideoname.TabIndex = 8;
             // 
+            // lblaudiomsg
+            // 
+            this.lblaudiomsg.AutoSize = true;
+            this.lblaudiomsg.Location = new System.Drawing.Point(350, 47);
+            this.lblaudiomsg.Name = "lblaudiomsg";
+            this.lblaudiomsg.Size = new System.Drawing.Size(50, 20);
+            this.lblaudiomsg.TabIndex = 9;
+            this.lblaudiomsg.Text = "0 files";
+            // 
+            // lblimagefilesmsg
+            // 
+            this.lblimagefilesmsg.AutoSize = true;
+            this.lblimagefilesmsg.Location = new System.Drawing.Point(350, 117);
+            this.lblimagefilesmsg.Name = "lblimagefilesmsg";
+            this.lblimagefilesmsg.Size = new System.Drawing.Size(50, 20);
+            this.lblimagefilesmsg.TabIndex = 10;
+            this.lblimagefilesmsg.Text = "0 files";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 597);
+            this.Controls.Add(this.lblimagefilesmsg);
+            this.Controls.Add(this.lblaudiomsg);
             this.Controls.Add(this.txtvideoname);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button3);
@@ -125,7 +147,7 @@ namespace WindowsFormsApp2
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Videi Creator";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,6 +163,8 @@ namespace WindowsFormsApp2
         private System.Windows.Forms.OpenFileDialog openFileDialogimage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtvideoname;
+        private System.Windows.Forms.Label lblaudiomsg;
+        private System.Windows.Forms.Label lblimagefilesmsg;
     }
 }
 

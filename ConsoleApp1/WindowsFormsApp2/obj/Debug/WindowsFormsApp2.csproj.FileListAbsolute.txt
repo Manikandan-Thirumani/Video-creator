@@ -13,3 +13,6 @@ C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\obj\De
 C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.exe
 C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.pdb
 C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\bin\Debug\TagLibSharp.dll
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\bin\Debug\TagLibSharp.pdb
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\WindowsFormsApp2\bin\Debug\TagLibSharp.xml

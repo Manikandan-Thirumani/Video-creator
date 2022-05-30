@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using FFMpegSharp;
+using FFMpegSharp.FFMPEG;
+using System;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using AForge.Video;
-using AForge.Video.FFMPEG;
-using FFMpegSharp;
-using FFMpegSharp.FFMPEG;
 
 namespace WindowsFormsApp2
 {
@@ -46,11 +38,13 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
         private void button2_Click(object sender, EventArgs e)
         {
 
-            createVideo(txtvideoname.Text);
+            createVideo(txtvideoname.Text,0.2);
+            MessageBox.Show("Video created successfully");
+
 
         }
 
-        private void createVideo(string finalvideofilename)
+        private void createVideo(string finalvideofilename,double framerate)
         {
             clearfolders(resizedimagefolderpath);
             clearfolders(outputvideofolderpath);
@@ -79,7 +73,7 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
             FFMpeg videoencoder = new FFMpeg();
             var outguid = Guid.NewGuid();
             FileInfo[] imagelist = getListOfFiles(resizedimagefolderpath);
-            int totalimagesneeded = calculatetotalimage(inputaudiofilename, 10);
+            int totalimagesneeded = calculatetotalimage(inputaudiofilename, (int)(1/ framerate));
             int totalloop = totalimagesneeded / imagelist.Length;
             totalloop=totalloop == 0 ? 1 : totalloop;
             ImageInfo[] slides = new ImageInfo[totalimagesneeded+2];
@@ -97,9 +91,8 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
             }
 
             var videoextenstion = finalvideofilename.Split('.')[1];
-            var combinedimagevideo= videoencoder.JoinImageSequence(new FileInfo(outputvideofolderpath + "\\" + outguid+"."+ videoextenstion), 0.1, slides);
+            var combinedimagevideo= videoencoder.JoinImageSequence(new FileInfo(outputvideofolderpath + "\\" + outguid+"."+ videoextenstion), framerate, slides);
             videoencoder.ReplaceAudio(combinedimagevideo, inputaudio, new FileInfo(outputvideofolderpath + "\\" + finalvideofilename));
-            MessageBox.Show("completed");
         }
 
         private FileInfo[]  getListOfFiles(string folderpath)
@@ -130,8 +123,8 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
 
         private int calculatetotalimage(string audiofilepath,int secondsbeetweenimages)
         {
-            int audiolengthinms = GetSoundLength(audiofilepath);
-            int audiolengthinsec =(int) Math.Ceiling((decimal)audiolengthinms / 1000);
+            TagLib.File file = TagLib.File.Create(audiofilepath);
+            int audiolengthinsec = (int)file.Properties.Duration.TotalSeconds;
             int returnval =(int) Math.Ceiling((decimal)audiolengthinsec / secondsbeetweenimages);
             return returnval;
         }
@@ -142,6 +135,7 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
             if (openFileDialogaudio.ShowDialog() == DialogResult.OK)
             {
 File.Copy(openFileDialogaudio.FileName, inputaudiofolderpath+"\\"+ openFileDialogaudio.SafeFileName);
+lblaudiomsg.Text = "1 audiofile uploaded";
             }
         }
 
@@ -156,6 +150,8 @@ File.Copy(openFileDialogaudio.FileName, inputaudiofolderpath+"\\"+ openFileDialo
                     File.Copy(openFileDialogimage.FileNames[i], inputimagefolderpath + "\\" + openFileDialogimage.SafeFileNames[i]);
 
                 }
+
+                lblimagefilesmsg.Text = openFileDialogimage.FileNames.Length.ToString() + " image files uploaded";
             }
         }
 
