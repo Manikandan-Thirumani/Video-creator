@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Convertors";
+}
+
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="FileUpload">
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Upload one or more files using this form:</p>
+            <input type="file" name="files" />
+        </div>
+    <div class="row">
+    @if (TempData["error"] != null)
+    {
+        <label style="color: red">@TempData["error"] </label>
+    }</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Upload" />
+            </div>
+            <div class="row">
+                @if (TempData["filetodownoad"] != null)
+                {
+                @Html.ActionLink("Download",
+                "Download", "Home",
+                new { file = @TempData["filetodownoad"] })
+                }
+            </div>
+        </div>
+</form>

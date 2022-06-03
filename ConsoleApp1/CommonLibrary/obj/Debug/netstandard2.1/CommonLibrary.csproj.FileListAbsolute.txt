@@ -1,0 +1,10 @@
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\bin\Debug\netstandard2.1\CommonLibrary.deps.json
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\bin\Debug\netstandard2.1\CommonLibrary.dll
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\bin\Debug\netstandard2.1\CommonLibrary.pdb
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.csproj.AssemblyReference.cache
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.AssemblyInfoInputs.cache
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.AssemblyInfo.cs
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.csproj.CoreCompileInputs.cache
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.dll
+C:\manikandanT\My-leaining\Source\Convertors\ConsoleApp1\CommonLibrary\obj\Debug\netstandard2.1\CommonLibrary.pdb

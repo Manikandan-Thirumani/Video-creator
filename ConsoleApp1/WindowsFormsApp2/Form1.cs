@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp2
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IDisposable
     {
 private string inputaudiofolderpath = Application.StartupPath + "\\audios";
 private string inputimagefolderpath = Application.StartupPath + "\\images";
@@ -20,10 +20,10 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
         public Form1()
         {
             InitializeComponent();
-            foreach (FileInfo file in new DirectoryInfo(Application.StartupPath + "\\resized").GetFiles())
-            {
-                file.Delete();
-            }
+            //foreach (FileInfo file in new DirectoryInfo(Application.StartupPath + "\\resized").GetFiles())
+            //{
+            //    file.Delete();
+            //}
         }
         private Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
         {
@@ -39,12 +39,9 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
         {
 
             createVideo(txtvideoname.Text,0.2);
-            MessageBox.Show("Video created successfully");
-
-
         }
 
-        private void createVideo(string finalvideofilename,double framerate)
+        private void createVideo(string finalvideofilename, double framerate)
         {
             clearfolders(resizedimagefolderpath);
             clearfolders(outputvideofolderpath);
@@ -53,37 +50,47 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
                 MessageBox.Show("No audio file found");
                 return;
             }
+
             if (getListOfFiles(inputimagefolderpath).Length < 1)
             {
                 MessageBox.Show("No image file found");
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(finalvideofilename))
+            {
+                MessageBox.Show("please provide video file name");
+                return;
+            }
+
             string inputaudiofilename = getListOfFiles(inputaudiofolderpath)[0].FullName;
             FileInfo inputaudio = new FileInfo(inputaudiofilename);
+
             foreach (FileInfo file in getListOfFiles(inputimagefolderpath))
             {
                 var fileguid = Guid.NewGuid();
-                Image src = Image.FromFile(file.FullName, true); ;
+                Image src = Image.FromFile(file.FullName, true);
+                ;
                 Bitmap imageinitial = (Bitmap)src;
                 Bitmap image = ResizeBitmap(imageinitial, 512, 512);
-                image.Save(resizedimagefolderpath + "\\"+ fileguid + ".png");
+                image.Save(resizedimagefolderpath + "\\" + fileguid + ".png");
+                image.Dispose();
+                src.Dispose();
             }
 
-            FFMpeg videoencoder = new FFMpeg();
             var outguid = Guid.NewGuid();
             FileInfo[] imagelist = getListOfFiles(resizedimagefolderpath);
-            int totalimagesneeded = calculatetotalimage(inputaudiofilename, (int)(1/ framerate));
+            int totalimagesneeded = calculatetotalimage(inputaudiofilename, (int)(1 / framerate));
             int totalloop = totalimagesneeded / imagelist.Length;
-            totalloop=totalloop == 0 ? 1 : totalloop;
-            ImageInfo[] slides = new ImageInfo[totalimagesneeded+2];
+            totalloop = totalloop == 0 ? 1 : totalloop;
+            ImageInfo[] slides = new ImageInfo[totalimagesneeded + 2];
 
-            for (int j = 0; j < totalloop+1; j++)
+            for (int j = 0; j < totalloop + 1; j++)
             {
 
                 for (int i = 0; i < imagelist.Length; i++)
                 {
-                    if ((j * imagelist.Length) + i < totalimagesneeded+2)
+                    if ((j * imagelist.Length) + i < totalimagesneeded + 2)
                     {
                         slides[(j * imagelist.Length) + i] = ImageInfo.FromPath(imagelist[i].FullName);
                     }
@@ -91,9 +98,18 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
             }
 
             var videoextenstion = finalvideofilename.Split('.')[1];
-            var combinedimagevideo= videoencoder.JoinImageSequence(new FileInfo(outputvideofolderpath + "\\" + outguid+"."+ videoextenstion), framerate, slides);
-            videoencoder.ReplaceAudio(combinedimagevideo, inputaudio, new FileInfo(outputvideofolderpath + "\\" + finalvideofilename));
+            using (var videoencoder = new FFMpeg())
+            {
+                var combinedimagevideo = videoencoder.JoinImageSequence(
+                    new FileInfo(outputvideofolderpath + "\\" + outguid + "." + videoextenstion), framerate, slides);
+                videoencoder.ReplaceAudio(combinedimagevideo, inputaudio,
+                    new FileInfo(outputvideofolderpath + "\\" + finalvideofilename));
+                combinedimagevideo = null;
+            }
+            MessageBox.Show("Video created successfully");
+
         }
+
 
         private FileInfo[]  getListOfFiles(string folderpath)
         {
@@ -132,10 +148,11 @@ private string outputvideofolderpath = Application.StartupPath + "\\videos";
         private void button1_Click(object sender, EventArgs e)
         {
             clearfolders(inputaudiofolderpath);
+
             if (openFileDialogaudio.ShowDialog() == DialogResult.OK)
             {
-File.Copy(openFileDialogaudio.FileName, inputaudiofolderpath+"\\"+ openFileDialogaudio.SafeFileName);
-lblaudiomsg.Text = "1 audiofile uploaded";
+                File.Copy(openFileDialogaudio.FileName, inputaudiofolderpath + "\\" + openFileDialogaudio.SafeFileName);
+                lblaudiomsg.Text = "1 audiofile uploaded";
             }
         }
 
@@ -145,6 +162,11 @@ lblaudiomsg.Text = "1 audiofile uploaded";
             openFileDialogimage.Multiselect = true;
             if (openFileDialogimage.ShowDialog() == DialogResult.OK)
             {
+                if (openFileDialogimage.FileNames.Length == 1)
+                {
+                    MessageBox.Show("Please select more than 1 image");
+                    return;
+                }
                 for (int i = 0; i < openFileDialogimage.FileNames.Length; i++)
                 {
                     File.Copy(openFileDialogimage.FileNames[i], inputimagefolderpath + "\\" + openFileDialogimage.SafeFileNames[i]);
@@ -163,6 +185,8 @@ lblaudiomsg.Text = "1 audiofile uploaded";
             }
             else
             {
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
                 new DirectoryInfo(folderpath).GetFiles().AsParallel().ForAll((f) => f.Delete());
 
             }
